@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist de Revisión de Curso – MPCG 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #f4f1eb;
+    --bg2: #eae6dc;
+    --surface: #ffffff;
+    --primary: #1a3a2e;
+    --accent: #c8773a;
+    --accent2: #7a9e6e;
+    --text: #1c1c1c;
+    --muted: #7a7a72;
+    --border: #d4cfbf;
+    --check-ok: #4a8c5c;
+    --check-no: #b94040;
+    --check-na: #8a8a82;
+    --shadow: 0 2px 12px rgba(26,58,46,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--primary);
+    color: #f4f1eb;
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(200,119,58,0.15);
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(122,158,110,0.12);
+    pointer-events: none;
+  }
+  .header-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  header p {
+    font-size: 0.88rem;
+    color: rgba(244,241,235,0.72);
+    max-width: 560px;
+    line-height: 1.55;
+  }
+
+  /* METADATA FORM */
+  .meta-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+  .meta-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+    min-width: 160px;
+  }
+  .meta-field label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-field input, .meta-field select {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .meta-field input:focus, .meta-field select:focus {
+    border-color: var(--primary);
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  .progress-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--primary));
+    border-radius: 99px;
+    transition: width 0.35s ease;
+    width: 0%;
+  }
+  .progress-pct {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+    min-width: 44px;
+    text-align: right;
+  }
+  .counters {
+    display: flex;
+    gap: 0.7rem;
+  }
+  .counter-badge {
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 99px;
+  }
+  .counter-badge.ok { background: #e0f0e6; color: var(--check-ok); }
+  .counter-badge.no { background: #f5e0e0; color: var(--check-no); }
+  .counter-badge.na { background: #ebebeb; color: var(--check-na); }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 1.8rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .section-header {
+    background: var(--primary);
+    color: #f4f1eb;
+    padding: 0.85rem 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover { background: #22483a; }
+  .section-icon {
+    width: 28px; height: 28px;
+    background: rgba(200,119,58,0.25);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
+  }
+  .section-count {
+    font-size: 0.72rem;
+    color: rgba(244,241,235,0.6);
+    font-weight: 400;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .section-chevron {
+    font-size: 0.75rem;
+    transition: transform 0.25s;
+    opacity: 0.7;
+  }
+  .section.collapsed .section-chevron { transform: rotate(-90deg); }
+  .section-body { display: block; }
+  .section.collapsed .section-body { display: none; }
+
+  /* ITEMS */
+  .item {
+    border-bottom: 1px solid var(--bg2);
+    padding: 0.85rem 1.3rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem;
+    align-items: start;
+    transition: background 0.15s;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: #fafaf8; }
+
+  .item-text {
+    font-size: 0.87rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .item-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+  .item-required {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+  .item-required.req { background: #fde8d8; color: #b85a1a; }
+  .item-required.rec { background: #e0ecf4; color: #2a6a96; }
+
+  .item-controls {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .btn-check {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s;
+    color: var(--muted);
+  }
+  .btn-check:hover { transform: scale(1.1); }
+  .btn-check.active-ok {
+    background: #e0f0e6;
+    border-color: var(--check-ok);
+    color: var(--check-ok);
+  }
+  .btn-check.active-no {
+    background: #f5e0e0;
+    border-color: var(--check-no);
+    color: var(--check-no);
+  }
+  .btn-check.active-na {
+    background: #ebebeb;
+    border-color: var(--check-na);
+    color: var(--check-na);
+  }
+
+  /* NOTES */
+  .item-note-wrap {
+    grid-column: 1 / -1;
+    margin-top: 0.2rem;
+  }
+  .item-note {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.65rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text);
+    background: var(--bg);
+    resize: vertical;
+    min-height: 52px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .item-note:focus { border-color: var(--primary); background: var(--surface); }
+  .note-toggle {
+    font-size: 0.72rem;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.15s;
+  }
+  .note-toggle:hover { color: var(--primary); }
+
+  /* OBSERVATIONS SECTION */
+  .obs-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+  }
+  .obs-section h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 0.7rem;
+  }
+  .obs-section textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    color: var(--text);
+    background: var(--bg);
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+  }
+  .obs-section textarea:focus { border-color: var(--primary); background: var(--surface); }
+
+  /* ACTIONS */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+  .btn {
+    padding: 0.6rem 1.3rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: #f4f1eb;
+  }
+  .btn-primary:hover { background: #22483a; transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--primary);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--primary); }
+  .btn-accent {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-accent:hover { background: #b56530; transform: translateY(-1px); }
+
+  /* RESULT PANEL */
+  #result-panel {
+    display: none;
+    background: var(--surface);
+    border: 1.5px solid var(--primary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(26,58,46,0.12);
+  }
+  #result-panel h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .result-card {
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    text-align: center;
+  }
+  .result-card .rc-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .result-card .rc-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.3rem;
+  }
+  .result-card.ok { background: #e0f0e6; color: var(--check-ok); }
+  .result-card.no { background: #f5e0e0; color: var(--check-no); }
+  .result-card.na { background: #ebebeb; color: var(--check-na); }
+  .result-card.total { background: #e8e3d8; color: var(--primary); }
+  .result-verdict {
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .result-verdict.aprobado { background: #d4edda; color: #1a5e2e; }
+  .result-verdict.revisar { background: #fff3cd; color: #856404; }
+  .result-verdict.rechazado { background: #f8d7da; color: #721c24; }
+
+  @media (max-width: 600px) {
+    .meta-bar { padding: 1rem; }
+    main { padding: 1rem 0.8rem 3rem; }
+    .progress-bar-wrap { padding: 0.8rem 1rem; }
+    .counters { display: none; }
+  }
+  @media print {
+    .progress-bar-wrap { position: static; }
+    .btn, .actions { display: none; }
+    .item-note { min-height: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Educación Virtual · Universidad Mayor</div>
+  <h1>Checklist de Revisión de Curso</h1>
+  <p>Magíster en Planificación y Control de Gestión · Diseño Metodológico 2026. Marca cada ítem como ✓ Cumple, ✗ No cumple o — No aplica.</p>
+</header>
+
+<div class="meta-bar">
+  <div class="meta-field">
+    <label>Nombre de la asignatura</label>
+    <input type="text" id="meta-asignatura" placeholder="Ej: Gestión Estratégica">
+  </div>
+  <div class="meta-field">
+    <label>Docente responsable</label>
+    <input type="text" id="meta-docente" placeholder="Nombre completo">
+  </div>
+  <div class="meta-field" style="max-width:130px">
+    <label>Semanas de dictación</label>
+    <select id="meta-semanas">
+      <option value="">Seleccionar</option>
+      <option value="4">4 semanas</option>
+      <option value="5">5 semanas</option>
+      <option value="7">7 semanas</option>
+      <option value="12">12 semanas</option>
+    </select>
+  </div>
+  <div class="meta-field" style="max-width:130px">
+    <label>N° de unidades</label>
+    <input type="number" id="meta-unidades" placeholder="Ej: 3" min="1" max="4">
+  </div>
+  <div class="meta-field">
+    <label>Revisado por</label>
+    <input type="text" id="meta-revisor" placeholder="Persona que revisa">
+  </div>
+  <div class="meta-field" style="max-width:140px">
+    <label>Fecha de revisión</label>
+    <input type="date" id="meta-fecha">
+  </div>
+</div>
+
+<div class="progress-bar-wrap">
+  <span class="progress-label">Avance</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+  <span class="progress-pct" id="progress-pct">0%</span>
+  <div class="counters">
+    <span class="counter-badge ok" id="cnt-ok">✓ 0</span>
+    <span class="counter-badge no" id="cnt-no">✗ 0</span>
+    <span class="counter-badge na" id="cnt-na">— 0</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── SECCIÓN 1: ESTRUCTURA GENERAL ── -->
+  <div class="section" id="sec-estructura">
+    <div class="section-header" onclick="toggleSection('sec-estructura')">
+      <div class="section-icon">📋</div>
+      <span class="section-title">1. Estructura General del Aula</span>
+      <span class="section-count" id="count-sec-estructura"></span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="item" data-id="e2" data-section="sec-estructura">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Los recursos y evaluaciones de la asignatura están habilitados y configurados correctamente en la plataforma.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('e2','ok',this)" title="Cumple">✓</button>
+          <button class="btn-check" onclick="setState('e2','no',this)" title="No cumple">✗</button>
+          <button class="btn-check" onclick="setState('e2','na',this)" title="No aplica">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('e2')">＋ agregar observación</button><textarea class="item-note" id="note-e2" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="e3" data-section="sec-estructura">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Se cuenta con el programa de estudio, la planificación y la/el docente validador/a proporcionados por el responsable del programa.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('e3','ok',this)" title="Cumple">✓</button>
+          <button class="btn-check" onclick="setState('e3','no',this)" title="No cumple">✗</button>
+          <button class="btn-check" onclick="setState('e3','na',this)" title="No aplica">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('e3')">＋ agregar observación</button><textarea class="item-note" id="note-e3" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 2: RECURSOS ASINCRÓNICOS ── -->
+  <div class="section" id="sec-recursos">
+    <div class="section-header" onclick="toggleSection('sec-recursos')">
+      <div class="section-icon">🎬</div>
+      <span class="section-title">2. Recursos de Aprendizaje Asincrónicos</span>
+      <span class="section-count" id="count-sec-recursos"></span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+
+      <div class="item" data-id="r1" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Video de bienvenida: existe 1 video de bienvenida por asignatura (máx. 3 minutos) que presenta resultados de aprendizaje, temas, estructura de evaluaciones y motiva al estudiantado.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r1','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r1','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r1','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r1')">＋ agregar observación</button><textarea class="item-note" id="note-r1" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r2" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Podcast gráfico de orientaciones: existe 1 por unidad (máx. 3 en total), con duración de 2 a 3 minutos, que explica temas, resultados de aprendizaje y vincula con el perfil de egreso.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r2','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r2','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r2','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r2')">＋ agregar observación</button><textarea class="item-note" id="note-r2" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r3" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Videoclase: existe 1 por unidad (máx. 3 en total), duración máx. 30 minutos, con estructura: objetivo, introducción, desarrollo, conclusión y referencias APA.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r3','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r3','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r3','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r3')">＋ agregar observación</button><textarea class="item-note" id="note-r3" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r4" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Recurso multimedia (Storyline/H5P/Genially): existe al menos 1 por unidad (máx. 3 en total), duración máx. 10 minutos, con estructura: objetivo, introducción, desarrollo, conclusión y referencias APA.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r4','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r4','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r4','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r4')">＋ agregar observación</button><textarea class="item-note" id="note-r4" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r5" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Clase escrita: existe 1 por asignatura, mínimo 16 páginas de desarrollo (sin portada, índice ni referencias), disponible en RISE y PDF descargable, con estructura completa (portada/índice/introducción/desarrollo/conclusión/referencias APA).</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r5','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r5','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r5','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r5')">＋ agregar observación</button><textarea class="item-note" id="note-r5" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r6" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">La clase escrita fue elaborada con la plantilla del Equipo de Educación Virtual y respeta su estructura.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r6','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r6','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r6','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r6')">＋ agregar observación</button><textarea class="item-note" id="note-r6" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r7" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Material bibliográfico obligatorio: existe al menos 1 recurso por unidad, de libre acceso o con permisos, con cita bibliográfica APA correcta.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r7','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r7','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r7','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r7')">＋ agregar observación</button><textarea class="item-note" id="note-r7" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r8" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Podcast gráfico de conclusión y cierre: existe 1 por asignatura, que rescata las ideas principales de todas las unidades y establece conexiones entre ellas.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r8','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r8','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r8','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r8')">＋ agregar observación</button><textarea class="item-note" id="note-r8" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r9" data-section="sec-recursos">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Foro de consultas académicas: existe 1 foro por asignatura, disponible desde el inicio hasta el término de la asignatura.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r9','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r9','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r9','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r9')">＋ agregar observación</button><textarea class="item-note" id="note-r9" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="r10" data-section="sec-recursos">
+        <div>
+          <span class="item-required rec">Recomendado</span>
+          <span class="item-text">Recursos complementarios optativos: se agregaron los recursos complementarios enviados por usted.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('r10','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('r10','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('r10','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('r10')">＋ agregar observación</button><textarea class="item-note" id="note-r10" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: CALIDAD DE LOS RECURSOS ── -->
+  <div class="section" id="sec-calidad">
+    <div class="section-header" onclick="toggleSection('sec-calidad')">
+      <div class="section-icon">🔍</div>
+      <span class="section-title">3. Calidad y Normas de los Recursos</span>
+      <span class="section-count" id="count-sec-calidad"></span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="item" data-id="c1" data-section="sec-calidad">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Todos los recursos cuentan con validación de una persona experta disciplinar en la materia (pauta de revisión firmada o registrada).</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c1','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c1','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c1','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c1')">＋ agregar observación</button><textarea class="item-note" id="note-c1" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="c2" data-section="sec-calidad">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Todos los recursos (clase escrita, videoclase, recurso multimedia, podcast de cierre) incluyen el texto de validación con nombre del/la validador/a, herramientas de IA utilizadas y responsabilidad asumida. En el caso de la clase escrita, este texto se incluye en el RISE.</span>
+          <div class="item-sub">Formato requerido: "Este material fue validado por [Nombre] para la Universidad Mayor…"</div>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c2','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c2','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c2','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c2')">＋ agregar observación</button><textarea class="item-note" id="note-c2" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="c3" data-section="sec-calidad">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Todas las imágenes, esquemas y tablas incluidas en los recursos cuentan con referencias bibliográficas bajo Norma APA y respetan los derechos de autoría.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c3','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c3','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c3','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c3')">＋ agregar observación</button><textarea class="item-note" id="note-c3" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="c4" data-section="sec-calidad">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">El contenido de los recursos se sustenta en fuentes bibliográficas fidedignas y validadas por la comunidad académica.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c4','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c4','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c4','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c4')">＋ agregar observación</button><textarea class="item-note" id="note-c4" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="c5" data-section="sec-calidad">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Si se utilizó IA generativa, se declara explícitamente en el RISE indicando el nombre de la herramienta y el motivo de uso.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c5','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c5','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c5','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c5')">＋ agregar observación</button><textarea class="item-note" id="note-c5" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="c6" data-section="sec-calidad">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">La clase escrita menciona en la contraportada: mes y año de última actualización, y frase "Este documento ha sido diseñado para su lectura en formato digital."</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c6','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c6','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c6','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c6')">＋ agregar observación</button><textarea class="item-note" id="note-c6" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="c7" data-section="sec-calidad">
+        <div>
+          <span class="item-required rec">Recomendado</span>
+          <span class="item-text">Se utilizó bibliografía disponible en la biblioteca digital de la Universidad Mayor para el material bibliográfico obligatorio.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('c7','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('c7','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('c7','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('c7')">＋ agregar observación</button><textarea class="item-note" id="note-c7" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="section" id="sec-formativas">
+    <div class="section-header" onclick="toggleSection('sec-formativas')">
+      <div class="section-icon">📝</div>
+      <span class="section-title">5. Evaluaciones Formativas</span>
+      <span class="section-count" id="count-sec-formativas"></span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="item" data-id="f1" data-section="sec-formativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Las evaluaciones formativas están vinculadas a las clases sincrónicas (al menos 1 por clase sincrónica).</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('f1','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('f1','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('f1','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('f1')">＋ agregar observación</button><textarea class="item-note" id="note-f1" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+
+      <div class="item" data-id="f4" data-section="sec-formativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Trabajo formativo (si aplica): 1 solo intento, retroalimentación del/la docente en máx. 48 horas tras la recepción, nota no impacta en la calificación final.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('f4','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('f4','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('f4','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('f4')">＋ agregar observación</button><textarea class="item-note" id="note-f4" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="f5" data-section="sec-formativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">La disponibilidad de cada evaluación formativa en plataforma está especificada en la Planificación de la asignatura.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('f5','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('f5','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('f5','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('f5')">＋ agregar observación</button><textarea class="item-note" id="note-f5" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="f6" data-section="sec-formativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Las rúbricas para foros y trabajos formativos (si aplica) han sido elaboradas considerando puntaje máximo de 100 puntos y entregadas al equipo constructor del curso.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('f6','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('f6','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('f6','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('f6')">＋ agregar observación</button><textarea class="item-note" id="note-f6" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 6: EVALUACIONES SUMATIVAS ── -->
+  <div class="section" id="sec-sumativas">
+    <div class="section-header" onclick="toggleSection('sec-sumativas')">
+      <div class="section-icon">🏆</div>
+      <span class="section-title">6. Evaluaciones Sumativas</span>
+      <span class="section-count" id="count-sec-sumativas"></span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="item" data-id="su1" data-section="sec-sumativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Las evaluaciones sumativas coinciden con la estructura de evaluación indicada en el programa de la asignatura (tipo, cantidad y ponderación).</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('su1','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('su1','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('su1','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('su1')">＋ agregar observación</button><textarea class="item-note" id="note-su1" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="su2" data-section="sec-sumativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Trabajo sumativo (si aplica): 1 solo intento, con rúbrica automatizada entregada por el/la responsable, verificación de originalidad con Safe Assign activada.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('su2','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('su2','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('su2','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('su2')">＋ agregar observación</button><textarea class="item-note" id="note-su2" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+
+      <div class="item" data-id="su4" data-section="sec-sumativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Foro sumativo (si aplica): contempla al menos 2 participaciones (respuesta inicial + comentario a compañera/o), con rúbrica automatizada elaborada y entregada al equipo constructor.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('su4','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('su4','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('su4','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('su4')">＋ agregar observación</button><textarea class="item-note" id="note-su4" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="su5" data-section="sec-sumativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Las evaluaciones sumativas privilegian metodologías activas (análisis de caso, proyectos, retos, COIL, aprendizaje colaborativo, etc.).</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('su5','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('su5','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('su5','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('su5')">＋ agregar observación</button><textarea class="item-note" id="note-su5" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="su6" data-section="sec-sumativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">La disponibilidad de cada evaluación sumativa (días disponibles) está especificada en la Planificación de la asignatura.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('su6','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('su6','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('su6','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('su6')">＋ agregar observación</button><textarea class="item-note" id="note-su6" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+      <div class="item" data-id="su7" data-section="sec-sumativas">
+        <div>
+          <span class="item-required req">Obligatorio</span>
+          <span class="item-text">Las rúbricas de todas las evaluaciones sumativas (trabajos y foros) están elaboradas con puntaje máximo de 100 puntos y entregadas al equipo constructor del curso.</span>
+        </div>
+        <div class="item-controls">
+          <button class="btn-check" onclick="setState('su7','ok',this)">✓</button>
+          <button class="btn-check" onclick="setState('su7','no',this)">✗</button>
+          <button class="btn-check" onclick="setState('su7','na',this)">—</button>
+        </div>
+        <div class="item-note-wrap"><button class="note-toggle" onclick="toggleNote('su7')">＋ agregar observación</button><textarea class="item-note" id="note-su7" style="display:none" placeholder="Observación..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ── OBSERVACIONES GENERALES ── -->
+  <div class="obs-section">
+    <h3>Observaciones generales</h3>
+    <textarea id="obs-generales" placeholder="Anota aquí cualquier observación, comentario o aspecto que requiera seguimiento..."></textarea>
+  </div>
+
+  <!-- ── PANEL DE RESULTADO ── -->
+  <div id="result-panel">
+    <h3>Resultado de la revisión</h3>
+    <div class="result-grid">
+      <div class="result-card total">
+        <div class="rc-num" id="res-total">0</div>
+        <div class="rc-label">Total ítems</div>
+      </div>
+      <div class="result-card ok">
+        <div class="rc-num" id="res-ok">0</div>
+        <div class="rc-label">Cumple</div>
+      </div>
+      <div class="result-card no">
+        <div class="rc-num" id="res-no">0</div>
+        <div class="rc-label">No cumple</div>
+      </div>
+      <div class="result-card na">
+        <div class="rc-num" id="res-na">0</div>
+        <div class="rc-label">No aplica</div>
+      </div>
+    </div>
+    <div class="result-verdict" id="res-verdict"></div>
+  </div>
+
+  <!-- ── ACCIONES ── -->
+  <div class="actions">
+    <button class="btn btn-primary" onclick="generateReport()">Ver resultado</button>
+    <button class="btn btn-accent" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+    <button class="btn btn-secondary" onclick="resetAll()">Reiniciar checklist</button>
+  </div>
+
+</main>
+
+<script>
+  const state = {};
+
+  function setState(id, val, btn) {
+    const prev = state[id];
+    if (prev === val) {
+      state[id] = null;
+      document.querySelectorAll(`[data-id="${id}"] .btn-check`).forEach(b => {
+        b.classList.remove('active-ok','active-no','active-na');
+      });
+    } else {
+      state[id] = val;
+      document.querySelectorAll(`[data-id="${id}"] .btn-check`).forEach(b => {
+        b.classList.remove('active-ok','active-no','active-na');
+      });
+      btn.classList.add(`active-${val}`);
+    }
+    updateProgress();
+    updateSectionCount(document.querySelector(`[data-id="${id}"]`).dataset.section);
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.item');
+    const total = all.length;
+    const answered = Object.values(state).filter(v => v !== null && v !== undefined).length;
+    const ok = Object.values(state).filter(v => v === 'ok').length;
+    const no = Object.values(state).filter(v => v === 'no').length;
+    const na = Object.values(state).filter(v => v === 'na').length;
+    const pct = Math.round((answered / total) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('cnt-ok').textContent = '✓ ' + ok;
+    document.getElementById('cnt-no').textContent = '✗ ' + no;
+    document.getElementById('cnt-na').textContent = '— ' + na;
+  }
+
+  function updateSectionCount(secId) {
+    const items = document.querySelectorAll(`[data-section="${secId}"]`);
+    let answered = 0;
+    items.forEach(item => {
+      if (state[item.dataset.id]) answered++;
+    });
+    document.getElementById('count-' + secId).textContent = `${answered}/${items.length}`;
+  }
+
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('collapsed');
+  }
+
+  function toggleNote(id) {
+    const note = document.getElementById('note-' + id);
+    const btn = note.previousElementSibling;
+    if (note.style.display === 'none') {
+      note.style.display = 'block';
+      btn.textContent = '− ocultar observación';
+    } else {
+      note.style.display = 'none';
+      btn.textContent = '＋ agregar observación';
+    }
+  }
+
+  function generateReport() {
+    const items = document.querySelectorAll('.item');
+    const total = items.length;
+    const ok = Object.values(state).filter(v => v === 'ok').length;
+    const no = Object.values(state).filter(v => v === 'no').length;
+    const na = Object.values(state).filter(v => v === 'na').length;
+
+    document.getElementById('res-total').textContent = total;
+    document.getElementById('res-ok').textContent = ok;
+    document.getElementById('res-no').textContent = no;
+    document.getElementById('res-na').textContent = na;
+
+    const effective = total - na;
+    const pct = effective > 0 ? Math.round((ok / effective) * 100) : 0;
+    const verdict = document.getElementById('res-verdict');
+
+    if (no === 0 && ok > 0) {
+      verdict.textContent = `✅ APROBADO — El curso cumple con el 100% de los ítems aplicables (${ok}/${effective}).`;
+      verdict.className = 'result-verdict aprobado';
+    } else if (pct >= 80) {
+      verdict.textContent = `⚠️ REQUIERE AJUSTES — Cumple el ${pct}% de los ítems aplicables. Hay ${no} ítem(s) pendiente(s) de corrección.`;
+      verdict.className = 'result-verdict revisar';
+    } else {
+      verdict.textContent = `❌ NO APROBADO — Cumple solo el ${pct}% de los ítems aplicables. Se requiere revisión profunda antes de publicar.`;
+      verdict.className = 'result-verdict rechazado';
+    }
+
+    document.getElementById('result-panel').style.display = 'block';
+    document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetAll() {
+    if (!confirm('¿Seguro que deseas reiniciar todo el checklist? Se perderán las marcas y observaciones.')) return;
+    Object.keys(state).forEach(k => delete state[k]);
+    document.querySelectorAll('.btn-check').forEach(b => b.classList.remove('active-ok','active-no','active-na'));
+    document.querySelectorAll('.item-note').forEach(n => { n.value = ''; n.style.display = 'none'; });
+    document.querySelectorAll('.note-toggle').forEach(b => b.textContent = '＋ agregar observación');
+    document.querySelectorAll('.meta-field input, .meta-field select').forEach(i => i.value = '');
+    document.getElementById('obs-generales').value = '';
+    document.getElementById('result-panel').style.display = 'none';
+    updateProgress();
+    const sections = ['sec-estructura','sec-recursos','sec-calidad','sec-formativas','sec-sumativas'];
+    sections.forEach(s => document.getElementById('count-' + s).textContent = '');
+  }
+
+  // Init section counts
+  window.addEventListener('DOMContentLoaded', () => {
+    const sections = ['sec-estructura','sec-recursos','sec-calidad','sec-formativas','sec-sumativas'];
+    sections.forEach(s => {
+      const items = document.querySelectorAll(`[data-section="${s}"]`);
+      document.getElementById('count-' + s).textContent = `0/${items.length}`;
+    });
+    // Set today's date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('meta-fecha').value = today;
+  });
+</script>
+</body>
+</html>
