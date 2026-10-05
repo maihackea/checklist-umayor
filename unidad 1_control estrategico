@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control estratégico · Unidad 1 · Diferencias entre estrategia, control y desempeño</title>
+<style>
+:root {
+  --dom: #007D81; --dom-70: #3D9C9F; --dom-40: #99CBCD;
+  --dom-15: #E0F0F0; --dom-08: #F2F9F9;
+  --gris: #4C4C4C; --gris-medio: #767676; --gris-borde: #DDDDDD;
+  --gris-fondo: #F6F6F6; --negro: #111111; --blanco: #FFFFFF;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--gris-fondo);
+  font-family: Calibri, Carlito, "Segoe UI", system-ui, sans-serif;
+  font-size: 17px; line-height: 1.62; color: var(--negro); text-align: left; }
+.recorrido { max-width: 840px; margin: 0 auto; padding: 26px 16px 90px; }
+.pantalla { background: var(--blanco); border: 1px solid var(--gris-borde);
+  border-radius: 10px; padding: 24px 32px 16px; margin-bottom: 20px; }
+.barra { display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--gris-borde); margin-bottom: 18px; }
+.curso { font-size: 14px; color: var(--gris-medio); }
+.etiqueta { font-size: 13px; font-weight: bold; color: var(--dom); white-space: nowrap; }
+h1 { font-size: 33px; line-height: 1.22; margin: 0 0 12px; }
+h2 { font-size: 24px; line-height: 1.3; margin: 0 0 14px; }
+h3 { font-size: 18px; margin: 0 0 6px; }
+.numsec { font-size: 14px; font-weight: bold; color: var(--dom); margin-bottom: 4px; }
+p { margin: 0 0 13px; }
+.pie { margin-top: 16px; padding-top: 9px; border-top: 1px solid var(--gris-borde);
+  font-size: 13px; color: var(--gris-medio); text-align: right; }
+figure { margin: 16px 0; text-align: center; }
+figure svg { max-width: 100%; height: auto; }
+figcaption { font-size: 13px; color: var(--gris-medio); margin-top: 4px; }
+.fuente { font-size: 14px; color: var(--gris-medio); }
+
+/* Portada */
+.portada { background: var(--dom); border-color: var(--dom); color: var(--blanco); }
+.portada .barra { border-bottom-color: rgba(255,255,255,.4); }
+.portada .curso, .portada .etiqueta { color: var(--blanco); }
+.portada .bajada { font-size: 19px; margin-bottom: 4px; }
+.portada .recorrido-nota { display: inline-block; border: 1px solid var(--blanco);
+  border-radius: 999px; padding: 5px 16px; font-size: 14px; }
+.portada .pie { border-top-color: rgba(255,255,255,.4); color: var(--blanco); }
+
+/* Pestañas */
+.rotulos { display: flex; gap: 6px; border-bottom: 3px solid var(--dom); margin-top: 8px; }
+.rotulos button { background: var(--gris-fondo); border: 1px solid var(--gris-borde);
+  border-bottom: 0; border-radius: 6px 6px 0 0; padding: 10px 22px; font: inherit;
+  font-weight: bold; color: var(--gris); cursor: pointer; }
+.rotulos button[aria-selected="true"] { background: var(--dom); border-color: var(--dom);
+  color: var(--blanco); }
+.panel-pest { background: var(--dom-08); padding: 18px 22px; border-radius: 0 0 8px 8px; }
+.panel-pest[hidden] { display: none; }
+.campo { display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--gris-borde); }
+.campo:last-child { border-bottom: 0; }
+.campo .rot { flex: 0 0 34%; font-weight: bold; color: var(--gris); font-size: 15px; }
+.campo .val { flex: 1 1 0; }
+
+/* Conmutador */
+.conmutador { display: inline-flex; border: 2px solid var(--dom); border-radius: 999px;
+  overflow: hidden; margin: 6px 0 14px; }
+.conmutador button { background: var(--blanco); border: 0; padding: 9px 22px; font: inherit;
+  font-weight: bold; color: var(--dom); cursor: pointer; }
+.conmutador button[aria-pressed="true"] { background: var(--dom); color: var(--blanco); }
+.vista { background: var(--dom-08); border-radius: 8px; padding: 18px 22px 8px; }
+.vista[hidden] { display: none; }
+.vista p { margin-bottom: 6px; }
+
+/* Instrucción de clic */
+.instruccion { font-size: 15px; font-weight: bold; color: var(--negro); margin: 10px 0 8px; }
+.instruccion::before { content: "\1F449"; margin-right: 8px; }
+
+/* Selector sobre figura, con panel de destino fijo */
+.grupo-rot { font-size: 15px; font-weight: bold; color: var(--dom); margin: 16px 0 2px; }
+.chinchetas { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.chinchetas button { display: flex; align-items: center; gap: 9px; background: var(--blanco);
+  border: 2px solid var(--dom); border-radius: 999px; padding: 8px 18px 8px 8px; font: inherit;
+  font-size: 15px; font-weight: bold; color: var(--dom); cursor: pointer; }
+.chinchetas button .n { width: 26px; height: 26px; border-radius: 50%; background: var(--dom-15);
+  text-align: center; line-height: 26px; font-size: 14px; }
+.chinchetas button[aria-pressed="true"] { background: var(--dom); color: var(--blanco); }
+.chinchetas button[aria-pressed="true"] .n { background: var(--blanco); color: var(--dom); }
+.destino { border: 2px solid var(--dom); border-radius: 8px; background: var(--dom-08);
+  padding: 18px 22px; min-height: 108px; }
+.destino .opcion[hidden] { display: none; }
+.destino h3 { color: var(--dom); }
+.destino p { margin: 0; }
+
+/* Carrusel */
+.carrusel { border: 2px solid var(--dom); border-radius: 8px; overflow: hidden; }
+.carrusel .ficha { padding: 20px 24px; min-height: 108px; background: var(--dom-08); }
+.carrusel .ficha[hidden] { display: none; }
+.carrusel .ficha .num { font-size: 13px; font-weight: bold; color: var(--gris-medio); }
+.carrusel .ficha h3 { margin: 4px 0 8px; color: var(--dom); }
+.carrusel .ficha p { margin: 0; }
+.mandos { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--dom-15); padding: 10px 16px; }
+.mandos button { background: var(--dom); color: var(--blanco); border: 0; border-radius: 4px;
+  padding: 8px 16px; font: inherit; font-weight: bold; cursor: pointer; }
+.mandos button:disabled { background: var(--gris-borde); color: var(--gris-medio);
+  cursor: default; }
+.mandos .cual { font-size: 15px; font-weight: bold; }
+
+/* Acordeón */
+.grupo-rot { font-size: 15px; font-weight: bold; color: var(--dom); margin: 16px 0 2px; }
+.acordeon { border-top: 1px solid var(--gris-borde); }
+.acordeon .item { border-bottom: 1px solid var(--gris-borde); }
+.acordeon button.cabeza { width: 100%; background: none; border: 0; cursor: pointer; font: inherit;
+  font-weight: bold; padding: 13px 40px 13px 46px; text-align: left; position: relative;
+  color: var(--negro); }
+.acordeon button.cabeza .num { position: absolute; left: 0; top: 10px; width: 30px; height: 30px;
+  border-radius: 50%; background: var(--dom-15); color: var(--dom); text-align: center;
+  line-height: 30px; font-size: 14px; }
+.acordeon button.cabeza[aria-expanded="true"] .num { background: var(--dom); color: var(--blanco); }
+.acordeon button.cabeza::after { content: "+"; position: absolute; right: 8px; top: 9px;
+  font-size: 21px; color: var(--dom); }
+.acordeon button.cabeza[aria-expanded="true"]::after { content: "–"; }
+.acordeon .panel { padding: 0 0 14px 46px; }
+.acordeon .panel[hidden] { display: none; }
+.acordeon .panel p { margin: 0; color: var(--gris); }
+
+/* Revelar */
+.casos { display: flex; gap: 16px; margin-top: 8px; }
+.caso { flex: 1 1 0; border: 2px solid var(--dom-40); border-radius: 8px; padding: 16px 18px; }
+.caso h3 { font-size: 17px; }
+button.revelar { background: var(--dom); color: var(--blanco); border: 0; border-radius: 4px;
+  padding: 9px 16px; font: inherit; font-size: 15px; font-weight: bold; cursor: pointer; }
+.revelado[hidden] { display: none; }
+.revelado { margin-top: 10px; border-top: 1px solid var(--gris-borde); padding-top: 10px; }
+.revelado p { margin: 0; }
+
+/* Cápsulas */
+.capsula { border: 2px solid var(--dom); border-radius: 10px; background: var(--dom-08); }
+.capsula h2 { color: var(--dom); }
+.cap-cuerpo { display: flex; gap: 16px; align-items: flex-start; }
+.cap-cuerpo .ico { flex: 0 0 52px; }
+.cap-cuerpo .ico svg { width: 52px; height: 52px; }
+.cap-cuerpo p:last-child { margin-bottom: 0; }
+.ejemplo { border: 1px dashed var(--dom); border-radius: 10px; background: var(--blanco); }
+
+/* Síntesis */
+.sintesis { background: var(--dom-08); }
+
+/* Referencias */
+.refs p { padding-left: 26px; text-indent: -26px; margin-bottom: 11px; }
+.nota-ia { margin-top: 18px; padding: 15px 18px; background: var(--dom-08);
+  border-left: 5px solid var(--dom); font-size: 15px; color: var(--gris); }
+
+#ir-refs { position: fixed; right: 20px; bottom: 20px; z-index: 20; background: var(--dom);
+  color: var(--blanco); border: 0; border-radius: 4px; padding: 11px 18px; font: inherit;
+  font-size: 14px; font-weight: bold; cursor: pointer; }
+
+@media (max-width: 700px) {
+  .casos, .cap-cuerpo, .campo { flex-direction: column; }
+  .rotulos { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<main class="recorrido">
+<section class="pantalla portada" id="p1">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Portada</span></div>
+<h1>Diferencias entre estrategia, control y desempeño</h1>
+<p class="bajada">Control estratégico · Ideas clave</p>
+<figure><svg viewBox="0 0 820 180" width="820" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de apertura: la estrategia marca la dirección, el desempeño muestra el resultado y el control enlaza ambos vigilando la brecha entre lo esperado y lo real."><rect x="30" y="30" width="210" height="56" rx="8" fill="#FFFFFF"/><text x="135" y="65" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#007D81" font-weight="bold">Estrategia</text><text x="135" y="104" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#FFFFFF">la dirección</text><rect x="580" y="30" width="210" height="56" rx="8" fill="#FFFFFF"/><text x="685" y="65" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#007D81" font-weight="bold">Desempeño</text><text x="685" y="104" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#FFFFFF">el resultado</text><path d="M 240 58 C 330 58, 330 132, 400 132" fill="none" stroke="#FFFFFF" stroke-width="3"/><path d="M 580 58 C 490 58, 490 132, 420 132" fill="none" stroke="#FFFFFF" stroke-width="3"/><rect x="300" y="110" width="220" height="46" rx="8" fill="#FFFFFF"/><text x="410" y="140" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#007D81" font-weight="bold">Control</text></svg></figure>
+<span class="recorrido-nota">Infografía · recorrido de 11 pantallas</span>
+<div class="pie">1 / 11</div></section>
+<section class="pantalla" id="p2">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Introducción</span></div>
+<h2>Diferencias entre estrategia, control y desempeño</h2>
+<p>Estrategia, control y desempeño son tres palabras que la conversación directiva usa a diario y que, por lo mismo, suele confundir. De esa confusión nacen decisiones equivocadas: se trata como problema de desempeño lo que es un error de estrategia, o se exige control donde falta una decisión sobre el rumbo.</p>
+<p>Este documento delimita los tres conceptos, muestra en qué se diferencian y explica cómo se conectan, para que dispongas de una distinción clara y aplicable.</p>
+<div class="pie">2 / 11</div></section>
+<section class="pantalla" id="p3">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Delimitación</span></div>
+<div class="numsec">01 ·</div><h2>Tres conceptos, tres preguntas distintas</h2>
+<p>Cada concepto responde a una pregunta propia. La estrategia mira la dirección; el desempeño, el resultado; el control, la relación entre ambos. La tabla los separa según la pregunta que plantean, lo que vigilan y un ejemplo concreto:</p>
+<figure><svg viewBox="0 0 820 220" width="820" height="220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tres preguntas distintas alineadas: la estrategia pregunta cómo se logran los objetivos finales, el desempeño qué resultados se obtienen y el control si lo decidido ocurre y sigue teniendo sentido."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><rect x="20" y="30" width="240" height="150" rx="8" fill="#E0F0F0" stroke="#007D81" stroke-width="1.5"/><circle cx="140" cy="72" r="22" fill="#007D81"/><text x="140" y="80" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="22" fill="#FFFFFF" font-weight="bold">?</text><text x="140" y="118" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#111111" font-weight="bold">Estrategia</text><text x="140" y="146" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">mira</text><text x="140" y="163" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">la dirección</text><rect x="290" y="30" width="240" height="150" rx="8" fill="#F2F9F9" stroke="#007D81" stroke-width="1.5"/><circle cx="410" cy="72" r="22" fill="#007D81"/><text x="410" y="80" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="22" fill="#FFFFFF" font-weight="bold">?</text><text x="410" y="118" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#111111" font-weight="bold">Desempeño</text><text x="410" y="146" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">mira</text><text x="410" y="163" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">el resultado</text><rect x="560" y="30" width="240" height="150" rx="8" fill="#FFFFFF" stroke="#007D81" stroke-width="1.5"/><circle cx="680" cy="72" r="22" fill="#007D81"/><text x="680" y="80" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="22" fill="#FFFFFF" font-weight="bold">?</text><text x="680" y="118" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#111111" font-weight="bold">Control</text><text x="680" y="146" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">mira la relación</text><text x="680" y="163" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">entre ambos</text><text x="410" y="206" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C" font-weight="bold">Cada concepto responde a una pregunta propia</text></svg><figcaption>Figura 1. Las tres preguntas. Fuente: elaboración propia.</figcaption></figure>
+<p class="instruccion">Haz clic en cada concepto para ver su ficha.</p>
+<div class="rotulos" role="tablist">
+<button role="tab" id="rot3-0" aria-selected="true" aria-controls="pest3-0" type="button">Estrategia</button>
+<button role="tab" id="rot3-1" aria-selected="false" aria-controls="pest3-1" type="button">Desempeño</button>
+<button role="tab" id="rot3-2" aria-selected="false" aria-controls="pest3-2" type="button">Control</button>
+</div>
+<div class="panel-pest" id="pest3-0" role="tabpanel" aria-labelledby="rot3-0">
+<div class="campo"><div class="rot">¿Qué pregunta responde?</div><div class="val">¿Cómo logramos los objetivos finales del negocio?</div></div>
+<div class="campo"><div class="rot">¿Qué observa?</div><div class="val">Las elecciones que configuran el modelo de negocio</div></div>
+<div class="campo"><div class="rot">Ejemplo</div><div class="val">Competir por confiabilidad y no por precio</div></div>
+</div>
+<div class="panel-pest" id="pest3-1" role="tabpanel" aria-labelledby="rot3-1" hidden>
+<div class="campo"><div class="rot">¿Qué pregunta responde?</div><div class="val">¿Qué resultados obtenemos en lo que importa?</div></div>
+<div class="campo"><div class="rot">¿Qué observa?</div><div class="val">Los resultados alcanzados</div></div>
+<div class="campo"><div class="rot">Ejemplo</div><div class="val">Margen, retención de clientes, costo unitario</div></div>
+</div>
+<div class="panel-pest" id="pest3-2" role="tabpanel" aria-labelledby="rot3-2" hidden>
+<div class="campo"><div class="rot">¿Qué pregunta responde?</div><div class="val">¿Lo decidido ocurre y sigue teniendo sentido?</div></div>
+<div class="campo"><div class="rot">¿Qué observa?</div><div class="val">La brecha entre lo esperado y lo real</div></div>
+<div class="campo"><div class="rot">Ejemplo</div><div class="val">Alertar cuando la retención cae bajo el umbral</div></div>
+</div>
+<p class="fuente" style="margin-top:10px">Tabla 1. Estrategia, control y desempeño: tres preguntas distintas. Fuente: elaboración propia.</p>
+<div class="pie">3 / 11</div></section>
+<section class="pantalla" id="p4">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Precisión conceptual</span></div>
+<h2>Dos lecturas de la palabra estrategia</h2>
+<p>Antes de avanzar, una precisión que evita la mayor parte de las confusiones. La palabra estrategia admite dos lecturas.</p>
+<p class="instruccion">Haz clic en cada lectura para ver en qué consiste.</p>
+<div class="conmutador" role="group">
+<button type="button" aria-pressed="true" aria-controls="vis4-0">Como plan estratégico</button>
+<button type="button" aria-pressed="false" aria-controls="vis4-1">Como modelo de negocio</button>
+</div>
+<div class="vista" id="vis4-0"><p>Una la entiende como plan estratégico, esto es, el conjunto de objetivos e iniciativas con que la organización busca mejorar.</p><figure><svg viewBox="0 0 700 200" width="700" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Primera lectura de la palabra estrategia: el plan estratégico, entendido como el conjunto de objetivos e iniciativas con que la organización busca mejorar."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><rect x="40" y="40" width="280" height="56" rx="8" fill="#E0F0F0" stroke="#007D81" stroke-width="1.5"/><text x="180" y="75" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#111111" font-weight="bold">Plan estratégico</text><line x1="180" y1="96" x2="180" y2="112" stroke="#007D81" stroke-width="2.5"/><line x1="82" y1="112" x2="274" y2="112" stroke="#007D81" stroke-width="2.5"/><line x1="82" y1="112" x2="82" y2="128" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><line x1="178" y1="112" x2="178" y2="128" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><line x1="274" y1="112" x2="274" y2="128" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><rect x="40" y="130" width="84" height="38" rx="5" fill="#FFFFFF" stroke="#99CBCD" stroke-width="1.5"/><text x="82" y="154" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#111111">Objetivo</text><rect x="136" y="130" width="84" height="38" rx="5" fill="#FFFFFF" stroke="#99CBCD" stroke-width="1.5"/><text x="178" y="154" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#111111">Iniciativa</text><rect x="232" y="130" width="84" height="38" rx="5" fill="#FFFFFF" stroke="#99CBCD" stroke-width="1.5"/><text x="274" y="154" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#111111">Objetivo</text><text x="400" y="62" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C">La mejora que la organización</text><text x="400" y="80" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C">se propone alcanzar</text><text x="400" y="150" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#767676" font-style="italic">Es lo que se quiere cambiar</text></svg><figcaption>Figura 2. La estrategia como plan estratégico. Fuente: elaboración propia.</figcaption></figure></div>
+<div class="vista" id="vis4-1" hidden><p>La otra la entiende como acción planificada o modelo de negocio, esto es, el conjunto integrado de elecciones con que la organización logra hoy sus objetivos finales.</p><figure><svg viewBox="0 0 700 200" width="700" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Segunda lectura de la palabra estrategia: el modelo de negocio, entendido como el conjunto integrado de elecciones con que la organización logra hoy sus objetivos finales."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><rect x="40" y="40" width="280" height="56" rx="8" fill="#007D81"/><text x="180" y="75" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#FFFFFF" font-weight="bold">Modelo de negocio</text><circle cx="86" cy="148" r="30" fill="#E0F0F0" stroke="#007D81" stroke-width="2"/><text x="86" y="153" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#111111" font-weight="bold">Elección</text><circle cx="164" cy="148" r="30" fill="#E0F0F0" stroke="#007D81" stroke-width="2"/><text x="164" y="153" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#111111" font-weight="bold">Elección</text><circle cx="242" cy="148" r="30" fill="#E0F0F0" stroke="#007D81" stroke-width="2"/><text x="242" y="153" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#111111" font-weight="bold">Elección</text><line x1="116" y1="148" x2="134" y2="148" stroke="#007D81" stroke-width="3"/><line x1="194" y1="148" x2="212" y2="148" stroke="#007D81" stroke-width="3"/><line x1="180" y1="96" x2="180" y2="104" stroke="#007D81" stroke-width="2.5"/><line x1="86" y1="104" x2="242" y2="104" stroke="#007D81" stroke-width="2.5"/><line x1="86" y1="104" x2="86" y2="116" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><line x1="164" y1="104" x2="164" y2="116" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><line x1="242" y1="104" x2="242" y2="116" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><text x="400" y="62" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C">Las elecciones con que la organización</text><text x="400" y="80" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C">logra hoy sus objetivos</text><text x="400" y="150" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#767676" font-style="italic">Es lo que ya se hace</text><text x="400" y="174" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#007D81" font-weight="bold">Esta es la lectura que usa el documento</text></svg><figcaption>Figura 3. La estrategia como modelo de negocio. Fuente: elaboración propia.</figcaption></figure></div>
+<p style="margin-top:14px">Este documento usa la segunda y reserva la expresión plan estratégico para la primera (Cobo Estévez, 2019). El desempeño es el resultado observable de esa acción, y el control es la disciplina que mantiene ambas bajo examen. Son piezas distintas de un mismo sistema, no sinónimos.</p>
+<div class="pie">4 / 11</div></section>
+<section class="pantalla" id="p5">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Naturaleza y vínculo</span></div>
+<div class="numsec">02 ·</div><h2>Cómo se diferencian y cómo se conectan</h2>
+<p>La diferencia principal es de naturaleza. La estrategia es el conjunto de elecciones que la organización sostiene hoy; el desempeño, una medición del presente o del pasado; el control, un proceso continuo que enlaza ambos. Porter (2011) describe lo que a su juicio constituye la mejor estrategia, aquella que crea una posición única y valiosa mediante un conjunto distinto de actividades. Su definición fija un estándar exigente, no un requisito de existencia: toda organización tiene una estrategia, mejor o peor, porque toda organización elige un modo de operar, y el desempeño puede mejorar por eficiencia sin que esas elecciones lleguen a ser distintivas.</p>
+<figure><svg viewBox="0 0 820 360" width="820" height="360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="El control opera sobre dos planos a la vez: vigila el plan estratégico, que es la mejora propuesta, y vigila el modelo de negocio, del que derivan las variables clave que miden el desempeño; al comparar el resultado con la meta aparece la brecha, y de ella se decide si corregir la ejecución o revisar el rumbo."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><rect x="30" y="26" width="330" height="54" rx="8" fill="#E0F0F0" stroke="#007D81" stroke-width="1.5"/><text x="195" y="59" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="15" fill="#111111" font-weight="bold">Plan estratégico</text><rect x="460" y="26" width="330" height="54" rx="8" fill="#E0F0F0" stroke="#007D81" stroke-width="1.5"/><text x="625" y="59" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="15" fill="#111111" font-weight="bold">Modelo de negocio</text><path d="M 195 80 C 195 116, 300 122, 366 134" fill="none" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><path d="M 625 80 C 625 116, 520 122, 454 134" fill="none" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><circle cx="410" cy="150" r="42" fill="#007D81"/><text x="410" y="156" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="15" fill="#FFFFFF" font-weight="bold">Control</text><line x1="410" y1="192" x2="410" y2="218" stroke="#007D81" stroke-width="2.5" marker-end="url(#v1)"/><rect x="292" y="226" width="236" height="46" rx="6" fill="#FFFFFF" stroke="#007D81" stroke-width="1.5"/><text x="410" y="255" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="15" fill="#111111" font-weight="bold">Brecha</text><text x="542" y="253" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#767676">esperado frente a real</text><path d="M 340 272 C 290 272, 250 288, 198 294" fill="none" stroke="#4C4C4C" stroke-width="2" marker-end="url(#v2)"/><path d="M 480 272 C 530 272, 570 288, 622 294" fill="none" stroke="#4C4C4C" stroke-width="2" marker-end="url(#v2)"/><rect x="48" y="302" width="300" height="54" rx="6" fill="#F2F9F9" stroke="#DDDDDD" stroke-width="1.5"/><text x="198" y="322" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#767676">si falla la ejecución</text><text x="198" y="343" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#111111" font-weight="bold">Ajustar la implementación</text><rect x="472" y="302" width="300" height="54" rx="6" fill="#F2F9F9" stroke="#DDDDDD" stroke-width="1.5"/><text x="622" y="322" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#767676">si falla la estrategia</text><text x="622" y="343" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#111111" font-weight="bold">Revisar el rumbo</text></svg><figcaption>Figura 4. Los dos planos del control. Fuente: elaboración propia.</figcaption></figure>
+<p class="grupo-rot">El control opera sobre dos planos a la vez</p>
+<p class="instruccion">Haz clic en cada plano del esquema para ver qué vigila el control en él.</p>
+<div class="chinchetas" role="group">
+<button type="button" aria-pressed="true" aria-controls="det5-0"><span class="n">1</span>Vigila el plan estratégico</button>
+<button type="button" aria-pressed="false" aria-controls="det5-1"><span class="n">2</span>Vigila el modelo de negocio</button>
+</div>
+<div class="destino">
+<div class="opcion" id="det5-0"><h3>Vigila el plan estratégico</h3><p>Es la mejora que la organización se propone.</p></div>
+<div class="opcion" id="det5-1" hidden><h3>Vigila el modelo de negocio</h3><p>Es la acción de la que depende el resultado día a día. De ese modelo deriva las variables clave que actúan como sensores, mide con ellas el desempeño y, al comparar el resultado con la meta, revela si las elecciones vigentes siguen funcionando.</p></div>
+</div>
+<p style="margin-top:14px">Cuando aparece una brecha, el control ayuda a distinguir si el problema está en la ejecución, y entonces se ajusta la implementación, o en la estrategia, y entonces se revisa el rumbo.</p>
+<div class="pie">5 / 11</div></section>
+<section class="pantalla capsula" id="p6">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Idea</span></div>
+<h2>La distinción que evita el error costoso</h2>
+<div class="cap-cuerpo"><div class="ico"><svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ícono de atención, que marca la idea clave."><circle cx="26" cy="26" r="23" fill="#007D81"/><line x1="26" y1="14" x2="26" y2="30" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/><circle cx="26" cy="38" r="2.6" fill="#FFFFFF"/></svg></div><div>
+<p>Ante un mal resultado, pregúntate primero si la estrategia sigue siendo correcta y luego si se ejecutó bien. Confundir un error de estrategia con uno de ejecución lleva a reforzar con más esfuerzo un camino equivocado.</p>
+</div></div>
+<div class="pie">6 / 11</div></section>
+<section class="pantalla" id="p7">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Consecuencias</span></div>
+<div class="numsec">03 ·</div><h2>Por qué conviene no confundirlos</h2>
+<p>Tratar el desempeño como si fuera la estrategia produce dos errores simétricos.</p>
+<figure><svg viewBox="0 0 820 280" width="820" height="280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dos errores simétricos sobre un mismo eje: a un lado atribuirse el mérito de un buen resultado que vino del entorno, al otro abandonar por impaciencia una buena estrategia; el control, en el centro, separa el efecto de las decisiones del efecto del entorno."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><line x1="120" y1="96" x2="700" y2="96" stroke="#111111" stroke-width="4"/><path d="M 410 96 L 380 152 L 440 152 Z" fill="#007D81"/><line x1="356" y1="152" x2="464" y2="152" stroke="#111111" stroke-width="4"/><rect x="310" y="162" width="200" height="40" rx="8" fill="#007D81"/><text x="410" y="188" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="15" fill="#FFFFFF" font-weight="bold">Control</text><line x1="120" y1="96" x2="120" y2="128" stroke="#4C4C4C" stroke-width="2"/><line x1="700" y1="96" x2="700" y2="128" stroke="#4C4C4C" stroke-width="2"/><path d="M 58 128 Q 120 174 182 128" fill="none" stroke="#4C4C4C" stroke-width="3"/><path d="M 638 128 Q 700 174 762 128" fill="none" stroke="#4C4C4C" stroke-width="3"/><rect x="20" y="192" width="220" height="54" rx="6" fill="#F2F9F9" stroke="#DDDDDD" stroke-width="1.5"/><text x="130" y="214" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="14" fill="#111111" font-weight="bold">Atribuirse</text><text x="130" y="234" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="14" fill="#111111" font-weight="bold">el mérito</text><rect x="580" y="192" width="220" height="54" rx="6" fill="#F2F9F9" stroke="#DDDDDD" stroke-width="1.5"/><text x="690" y="214" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="14" fill="#111111" font-weight="bold">Abandonar</text><text x="690" y="234" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="14" fill="#111111" font-weight="bold">por impaciencia</text><text x="410" y="270" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C" font-weight="bold">Separa el efecto de las decisiones del efecto del entorno</text></svg><figcaption>Figura 5. Los dos errores simétricos. Fuente: elaboración propia.</figcaption></figure>
+<p class="instruccion">Haz clic en los botones para recorrer los dos errores.</p>
+<div class="carrusel">
+<div class="ficha" id="fic7-0"><span class="num">Error 1 de 2</span><h3>Atribuirse el mérito</h3><p>Tomar como mérito estratégico un buen resultado que en realidad provino de una bonanza del sector.</p></div>
+<div class="ficha" id="fic7-1" hidden><span class="num">Error 2 de 2</span><h3>Abandonar por impaciencia</h3><p>Dejar una buena estrategia ante resultados que aún no maduran.</p></div>
+<div class="mandos"><button type="button" class="ant" disabled>Anterior</button><span class="cual">1 de 2</span><button type="button" class="sig">Siguiente</button></div>
+</div>
+<p style="margin-top:14px">El control bien ejercido protege de ambos: separa el efecto de las decisiones del efecto del entorno y evita confundir la suerte con la destreza.</p>
+<div class="pie">7 / 11</div></section>
+<section class="pantalla ejemplo" id="p8">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Ejemplo</span></div>
+<h2>El buen número que engaña</h2>
+<div class="cap-cuerpo"><div class="ico"><svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ícono de reproducción, que marca el ejemplo."><circle cx="26" cy="26" r="23" fill="none" stroke="#007D81" stroke-width="3"/><path d="M 20 16 L 36 26 L 20 36 Z" fill="#007D81"/></svg></div><div>
+<p>Una cadena de retail celebra ventas récord en un trimestre. El desempeño financiero es excelente, pero un indicador impulsor, la recompra de su clientela frecuente, viene cayendo. El récord provino de promociones que atraen compradores ocasionales mientras erosionan la lealtad. El desempeño tardío luce bien; el control, al vigilar la variable correcta, anticipa el problema antes de que la cifra se desplome.</p>
+</div></div>
+<figure><svg viewBox="0 0 820 330" width="820" height="330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema del caso: la curva de ventas del trimestre sube hasta un récord mientras la curva de recompra de la clientela frecuente viene cayendo, de modo que el indicador que anticipa contradice al que confirma."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><line x1="80" y1="250" x2="690" y2="250" stroke="#111111" stroke-width="2.5"/><line x1="80" y1="250" x2="80" y2="46" stroke="#111111" stroke-width="2.5"/><text x="690" y="274" text-anchor="end" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#767676">tiempo</text><polyline points="118,206 232,188 346,156 460,124 574,96 660,74" fill="none" stroke="#007D81" stroke-width="5"/><circle cx="118" cy="206" r="5" fill="#007D81"/><circle cx="232" cy="188" r="5" fill="#007D81"/><circle cx="346" cy="156" r="5" fill="#007D81"/><circle cx="460" cy="124" r="5" fill="#007D81"/><circle cx="574" cy="96" r="5" fill="#007D81"/><circle cx="660" cy="74" r="5" fill="#007D81"/><text x="700" y="78" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#007D81" font-weight="bold">Ventas: récord</text><polyline points="118,116 232,130 346,152 460,176 574,200 660,218" fill="none" stroke="#4C4C4C" stroke-width="4" stroke-dasharray="8 6"/><circle cx="118" cy="116" r="5" fill="#4C4C4C"/><circle cx="232" cy="130" r="5" fill="#4C4C4C"/><circle cx="346" cy="152" r="5" fill="#4C4C4C"/><circle cx="460" cy="176" r="5" fill="#4C4C4C"/><circle cx="574" cy="200" r="5" fill="#4C4C4C"/><circle cx="660" cy="218" r="5" fill="#4C4C4C"/><text x="700" y="222" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C" font-weight="bold">Recompra: cae</text><text x="124" y="100" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#767676">indicador impulsor</text><text x="124" y="224" text-anchor="start" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="11" fill="#767676">desempeño tardío</text><text x="410" y="314" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#111111" font-weight="bold">El control vigila la variable correcta y anticipa el problema</text></svg><figcaption>Figura 6. El indicador que anticipa contradice al que confirma. Fuente: elaboración propia.</figcaption></figure>
+<div class="pie">8 / 11</div></section>
+<section class="pantalla sintesis" id="p9">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Síntesis</span></div>
+<h2>La lección</h2>
+<p>La lección es directa: el desempeño dice qué ocurre, la estrategia explica cómo se logra, y el control conecta ambos para que la organización no se deje engañar por sus propios números.</p>
+<figure><svg viewBox="0 0 820 170" width="820" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Síntesis de los tres conceptos encadenados: el desempeño dice qué ocurre, la estrategia explica cómo se logra y el control conecta ambos."><defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#007D81"/></marker><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C4C4C"/></marker></defs><rect x="20" y="40" width="240" height="70" rx="8" fill="#E0F0F0" stroke="#007D81" stroke-width="1.5"/><text x="140" y="72" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#111111" font-weight="bold">Desempeño</text><text x="140" y="94" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">dice qué ocurre</text><rect x="290" y="40" width="240" height="70" rx="8" fill="#99CBCD" stroke="#007D81" stroke-width="1.5"/><text x="410" y="72" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#111111" font-weight="bold">Estrategia</text><text x="410" y="94" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#4C4C4C">explica cómo se logra</text><rect x="560" y="40" width="240" height="70" rx="8" fill="#007D81" stroke="#007D81" stroke-width="1.5"/><text x="680" y="72" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="16" fill="#FFFFFF" font-weight="bold">Control</text><text x="680" y="94" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="12" fill="#E0F0F0">conecta ambos</text><text x="410" y="150" text-anchor="middle" font-family="Calibri, Carlito, Segoe UI, sans-serif" font-size="13" fill="#4C4C4C" font-weight="bold">Para que la organización no se deje engañar por sus propios números</text></svg><figcaption>Figura 7. Los tres conceptos encadenados. Fuente: elaboración propia.</figcaption></figure>
+<div class="pie">9 / 11</div></section>
+<section class="pantalla" id="p10">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Conclusión</span></div>
+<h2>Para cerrar</h2>
+<p>Distinguir estrategia, control y desempeño no es un ejercicio académico, sino una competencia práctica. La estrategia define las elecciones con que la organización compite, el desempeño revela el resultado y el control mantiene la conversación entre ambos, capaz de señalar cuándo ejecutar mejor y cuándo cambiar esas elecciones.</p>
+<p>Quien domina esta distinción decide con más fundamento y conduce su organización con mayor solvencia, porque sabe leer sus resultados sin confundir la causa con el efecto.</p>
+<div class="pie">10 / 11</div></section>
+<section class="pantalla" id="p11">
+<div class="barra"><span class="curso">Control estratégico · Unidad 1</span><span class="etiqueta">Referencias</span></div>
+<h2>Referencias</h2><div class="refs">
+<p>Cobo Estévez, J. F. (2019). <i>Tableros estratégicos</i>. Edición Digital.</p>
+<p>Porter, M. E. (2011). ¿Qué es la estrategia? <i>Harvard Business Review América Latina</i>. (Trabajo original publicado en 1996)</p>
+</div>
+<p class="nota-ia"><b>Nota:</b> Este contenido fue desarrollado con apoyo de herramientas de inteligencia artificial generativa. El contenido ha sido supervisado, validado y contextualizado académicamente por el docente responsable de la asignatura.</p>
+<div class="pie">11 / 11</div></section>
+</main>
+<button id="ir-refs" type="button">Haz clic para ir a las referencias</button>
+
+<script>
+(function () {
+  function grupoExcluyente(cont, attr) {
+    var bs = Array.prototype.slice.call(cont.querySelectorAll("button"));
+    function activar(i) {
+      bs.forEach(function (o, k) {
+        o.setAttribute(attr, String(k === i));
+        document.getElementById(o.getAttribute("aria-controls")).hidden = (k !== i);
+      });
+    }
+    bs.forEach(function (b, i) {
+      b.addEventListener("click", function () { activar(i); });
+      b.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { activar((i + 1) % bs.length); bs[(i + 1) % bs.length].focus(); }
+        if (e.key === "ArrowLeft") {
+          activar((i - 1 + bs.length) % bs.length);
+          bs[(i - 1 + bs.length) % bs.length].focus();
+        }
+      });
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".rotulos"), function (g) {
+    grupoExcluyente(g, "aria-selected");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".conmutador, .chinchetas"),
+    function (g) { grupoExcluyente(g, "aria-pressed"); });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".carrusel"), function (c) {
+    var fichas = Array.prototype.slice.call(c.querySelectorAll(".ficha"));
+    var ant = c.querySelector(".ant"), sig = c.querySelector(".sig");
+    var cual = c.querySelector(".cual");
+    var i = 0;
+    function pinta() {
+      fichas.forEach(function (f, k) { f.hidden = (k !== i); });
+      ant.disabled = (i === 0);
+      sig.disabled = (i === fichas.length - 1);
+      cual.textContent = (i + 1) + " de " + fichas.length;
+    }
+    ant.addEventListener("click", function () { if (i > 0) { i--; pinta(); } });
+    sig.addEventListener("click", function () { if (i < fichas.length - 1) { i++; pinta(); } });
+    pinta();
+  });
+
+  var btn = document.getElementById("ir-refs");
+  if (btn) {
+    btn.addEventListener("click", function () {
+      document.getElementById("p11").scrollIntoView({ behavior: "smooth" });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
